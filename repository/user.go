@@ -29,3 +29,7 @@ func GetUserById(ctx context.Context, id string) (*models.User, error) {
 func Close() error {
 	return implementations.Close()
 }
+
+func GetUserByEmail(ctx context.Context, email string) (*models.User, error) {
+	return implementations.GetUserById(ctx, email)
+}
