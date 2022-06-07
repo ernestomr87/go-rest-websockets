@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/ernestomr87/go-rest-websockets/server"
@@ -13,6 +14,7 @@ type HomeResponse struct {
 }
 
 func HomeHandler(s server.Server) http.HandlerFunc {
+	log.Println("HomeHandler")
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Contet-Type", "application/json")
 		w.WriteHeader(http.StatusOK)

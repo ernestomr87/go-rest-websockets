@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"log"
 
 	"github.com/ernestomr87/go-rest-websockets/models"
@@ -24,13 +25,14 @@ func NewPostgresRepository(url string) (*PostgresRepository, error) {
 }
 
 func (repo *PostgresRepository) InsertUser(ctx context.Context, user *models.User) error {
-	_, err := repo.db.ExecContext(ctx, "INSERT INTO user (email, password) VALUES ($1, $2)", user.Email, user.Password)
+	_, err := repo.db.ExecContext(ctx, "INSERT INTO users (id, email, password) VALUES ($1, $2, $3)", user.Id, user.Email, user.Password)
 
+	fmt.Println(err)
 	return err
 }
 
 func (repo *PostgresRepository) GetUserById(ctx context.Context, id string) (*models.User, error) {
-	rows, err := repo.db.QueryContext(ctx, "SELECT id FROM user WHERE id = $1", id)
+	rows, err := repo.db.QueryContext(ctx, "SELECT id FROM users WHERE id = $1", id)
 	defer func() {
 		err = rows.Close()
 		if err != nil {
