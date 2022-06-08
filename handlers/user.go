@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -57,7 +58,7 @@ func SignUpHandler(s server.Server) http.HandlerFunc {
 		}
 
 		var user = models.User{
-			Email:    request.Password,
+			Email:    request.Email,
 			Password: string(hashedPassword),
 			Id:       id.String(),
 		}
@@ -90,12 +91,14 @@ func LoginHandler(s server.Server) http.HandlerFunc {
 
 		user, err := repository.GetUserByEmail(r.Context(), request.Email)
 		if user == nil {
-			http.Error(w, "Invalid Credentials"+err.Error(), http.StatusUnauthorized)
+			http.Error(w, "Invalid Credentials", http.StatusUnauthorized)
+			fmt.Println(err.Error())
 			return
 		}
 
 		if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(request.Password)); err != nil {
-			http.Error(w, "Invalid Credentials"+err.Error(), http.StatusUnauthorized)
+			http.Error(w, "Invalid Credentials", http.StatusUnauthorized)
+			fmt.Println(err.Error())
 			return
 		}
 
